@@ -7,7 +7,6 @@ using Android.Views;
 using Android.Widget;
 
 using UI.ActionsContentView;
-//using ActionsContentViewLibrary;
 
 using ActionsContentViewExample.ActionsAdapters;
 
@@ -56,8 +55,6 @@ namespace ActionsContentViewExample
             }
         }
 
-        //JAVA TO C# CONVERTER TODO TASK: Most Java annotations will not have direct .NET equivalent attributes:
-        //ORIGINAL LINE: @SuppressLint("DefaultLocale") private void init(int position)
         private void Init(int position)
         {
             int layoutId = MAdapter.GetItemAtPosition(position);
@@ -126,7 +123,5 @@ namespace ActionsContentViewExample
                 OuterInstance.Init(position);
             }
         }
-
     }
-
 }

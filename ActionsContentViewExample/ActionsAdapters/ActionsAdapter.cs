@@ -56,9 +56,7 @@ namespace ActionsContentViewExample.ActionsAdapters
         {
             return position;
         }
-
-        //JAVA TO C# CONVERTER TODO TASK: Most Java annotations will not have direct .NET equivalent attributes:
-        //ORIGINAL LINE: @SuppressLint("DefaultLocale") @Override public Android.Views.View getView(int position, Android.Views.View convertView, Android.Views.ViewGroup parent)
+        
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
             int type = GetItemViewType(position);
@@ -132,5 +130,4 @@ namespace ActionsContentViewExample.ActionsAdapters
             internal TextView Text;
         }
     }
-
 }

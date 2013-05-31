@@ -15,9 +15,7 @@ namespace ActionsContentViewExample.ActionFragment
         private string Url_Renamed;
 
         private bool ResetHistory = true;
-
-        //JAVA TO C# CONVERTER TODO TASK: Most Java annotations will not have direct .NET equivalent attributes:
-        //ORIGINAL LINE: @SuppressLint("SetJavaScriptEnabled") @Override public Android.Views.View onCreateView(Android.Views.LayoutInflater inflater, Android.Views.ViewGroup container, Android.OS.Bundle savedInstanceState)
+        
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             View v = inflater.Inflate(Resource.Layout.webview, container, false);
@@ -128,5 +126,4 @@ namespace ActionsContentViewExample.ActionFragment
             return false;
         }
     }
-
 }

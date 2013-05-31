@@ -11,7 +11,6 @@ using Android.Views;
 using Android.Widget;
 
 using UI.ActionsContentView;
-//using ActionsContentViewLibrary;
 
 namespace ActionsContentViewExample
 {

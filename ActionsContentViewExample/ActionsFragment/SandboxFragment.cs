@@ -9,7 +9,6 @@ using Android.Widget;
 using System;
 
 using UI.ActionsContentView;
-//using ActionsContentViewLibrary;
 
 namespace ActionsContentViewExample.ActionFragment
 {

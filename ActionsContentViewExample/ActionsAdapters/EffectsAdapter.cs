@@ -111,5 +111,4 @@ namespace ActionsContentViewExample.ActionsAdapters
             internal TextView Text;
         }
     }
-
 }
