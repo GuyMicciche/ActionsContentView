@@ -2,12 +2,8 @@ using Android.Content.Res;
 using Android.Net;
 using Android.OS;
 using Android.Support.V4.App;
-using Android.Util;
 using Android.Views;
 using Android.Widget;
-
-using System;
-
 using UI.ActionsContentView;
 
 namespace ActionsContentViewExample.ActionFragment
@@ -15,7 +11,6 @@ namespace ActionsContentViewExample.ActionFragment
     public class SandboxFragment : Fragment, View.IOnClickListener
     {
         public static string TAG = typeof(SandboxFragment).FullName;
-        private const bool DEBUG = false;
 
         public interface OnSettingsChangedListener
         {
@@ -24,7 +19,8 @@ namespace ActionsContentViewExample.ActionFragment
 
         private static string SETTINGS_SCHEME = "settings";
         private static string SETTINGS_AUTHORITY = "sandbox";
-        public static Android.Net.Uri SETTINGS_URI = new Android.Net.Uri.Builder().Scheme(SETTINGS_SCHEME).Authority(SETTINGS_AUTHORITY).Build();
+
+        public static Uri SETTINGS_URI = new Uri.Builder().Scheme(SETTINGS_SCHEME).Authority(SETTINGS_AUTHORITY).Build();
 
         public const int PREF_SPACING_TYPE = Resource.Id.prefSpacingType;
         public const int PREF_SPACING_WIDTH = Resource.Id.prefSpacingWidth;
@@ -49,6 +45,7 @@ namespace ActionsContentViewExample.ActionFragment
         private const int PREF_FLING_DURATION_VALUE = Resource.Id.prefFlingDurationValue;
 
         private View ViewRoot;
+
         private OnSettingsChangedListener mSettingsChangedListener;
 
         public virtual OnSettingsChangedListener onSettingsChangedListener
@@ -97,7 +94,7 @@ namespace ActionsContentViewExample.ActionFragment
                 {
                     if (spacingType.Equals(spacingTypeValues[i]))
                     {
-                        // showing additional value for spacing
+                        // Showing additional value for spacing
                         if (spacingTypes[i] == ActionsContentView.SpacingActionsWidth)
                         {
                             ViewRoot.FindViewById(Resource.Id.prefSpacingWidthAdditionalValue).Visibility = ViewStates.Visible;
@@ -163,15 +160,11 @@ namespace ActionsContentViewExample.ActionFragment
                     break;
                 case PREF_SHOW_SHADOW:
                     CheckBox viewValue = v.FindViewById<CheckBox>(PREF_SHOW_SHADOW_VALUE);
-                    bool @checked = !viewValue.Checked;
-                    viewValue.Checked = @checked;
+                    bool isChecked = !viewValue.Checked;
+                    viewValue.Checked = isChecked;
                     if (mSettingsChangedListener != null)
                     {
-                        mSettingsChangedListener.OnSettingChanged(id, @checked ? 1 : 0);
-                    }
-                    else if (DEBUG)
-                    {
-                        System.Console.WriteLine("OnSettingsChangedListener is not set");
+                        mSettingsChangedListener.OnSettingChanged(id, isChecked ? 1 : 0);
                     }
                     return;
                 case PREF_SHADOW_WIDTH:
@@ -221,11 +214,11 @@ namespace ActionsContentViewExample.ActionFragment
             }
 
             ValueChooserDialogFragment fragment = ValueChooserDialogFragment.NewInstance(id, titleId, itemsArrayId);
-            fragment.onSettingsSelectedListener = new OnSettingSelectedListenerAnonymousInnerClassHelper(this, v, id, valueId, valuesArrayId);
+            fragment.onSettingsSelectedListener = new SettingSelectedListener(this, v, id, valueId, valuesArrayId);
             fragment.Show(FragmentManager, ValueChooserDialogFragment.TAG);
         }
 
-        private class OnSettingSelectedListenerAnonymousInnerClassHelper : ValueChooserDialogFragment.OnSettingSelectedListener
+        private class SettingSelectedListener : ValueChooserDialogFragment.OnSettingSelectedListener
         {
             private readonly SandboxFragment OuterInstance;
 
@@ -234,7 +227,7 @@ namespace ActionsContentViewExample.ActionFragment
             private int ValueId;
             private int ValuesArrayId;
 
-            public OnSettingSelectedListenerAnonymousInnerClassHelper(SandboxFragment outerInstance, View v, int id, int valueId, int valuesArrayId)
+            public SettingSelectedListener(SandboxFragment outerInstance, View v, int id, int valueId, int valuesArrayId)
             {
                 this.OuterInstance = outerInstance;
                 this.v = v;
@@ -287,7 +280,7 @@ namespace ActionsContentViewExample.ActionFragment
                     case PREF_FLING_DURATION:
                         {
                             TextView viewValue = v.FindViewById<TextView>(ValueId);
-                            string value = Convert.ToString(values[item]);
+                            string value = values[item].ToString();
                             viewValue.Text = value;
                             break;
                         }
@@ -299,28 +292,24 @@ namespace ActionsContentViewExample.ActionFragment
                 {
                     OuterInstance.mSettingsChangedListener.OnSettingChanged(id, values[item]);
                 }
-                else if (DEBUG)
-                {
-                    System.Console.WriteLine("OnSettingsChangedListener is not set");
-                }
             }
         }
 
         private void SaveStringPrefState(Bundle outState, int prefValue)
         {
             TextView viewValue = ViewRoot.FindViewById<TextView>(prefValue);
-            outState.PutString(Convert.ToString(prefValue), viewValue.Text.ToString());
+            outState.PutString(prefValue.ToString(), viewValue.Text.ToString());
         }
 
         private void SaveBooleanPrefState(Bundle outState, int prefValue)
         {
             CompoundButton viewValue = ViewRoot.FindViewById<CompoundButton>(prefValue);
-            outState.PutBoolean(Convert.ToString(prefValue), viewValue.Checked);
+            outState.PutBoolean(prefValue.ToString(), viewValue.Checked);
         }
 
         private string RestoreStringPrefState(Bundle savedInstanceState, int prefValue)
         {
-            string value = savedInstanceState.GetString(Convert.ToString(prefValue));
+            string value = savedInstanceState.GetString(prefValue.ToString());
             TextView viewValue = ViewRoot.FindViewById<TextView>(prefValue);
             viewValue.Text = value;
 
@@ -329,7 +318,7 @@ namespace ActionsContentViewExample.ActionFragment
 
         private bool RestoreBooleanPrefState(Bundle savedInstanceState, int prefValue)
         {
-            bool value = savedInstanceState.GetBoolean(Convert.ToString(prefValue));
+            bool value = savedInstanceState.GetBoolean(prefValue.ToString());
             CompoundButton viewValue = ViewRoot.FindViewById<CompoundButton>(prefValue);
             viewValue.Checked = value;
 

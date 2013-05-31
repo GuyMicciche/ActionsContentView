@@ -23,17 +23,17 @@ namespace ActionsContentViewExample.ActionFragment
             ProgressBar viewContentProgress = v.FindViewById<ProgressBar>(Resource.Id.progress);
             ViewContentWebView = v.FindViewById<WebView>(Resource.Id.webview);
             ViewContentWebView.Settings.JavaScriptEnabled = true;
-            ViewContentWebView.SetWebViewClient(new WebViewClientAnonymousInnerClassHelper(this));
-            ViewContentWebView.SetWebChromeClient(new WebChromeClientAnonymousInnerClassHelper(this, viewContentProgress));
+            ViewContentWebView.SetWebViewClient(new MyWebViewClient(this));
+            ViewContentWebView.SetWebChromeClient(new MyWebChromeClient(this, viewContentProgress));
 
             return v;
         }
 
-        private class WebViewClientAnonymousInnerClassHelper : WebViewClient
+        private class MyWebViewClient : WebViewClient
         {
             private readonly WebViewFragment OuterInstance;
 
-            public WebViewClientAnonymousInnerClassHelper(WebViewFragment outerInstance)
+            public MyWebViewClient(WebViewFragment outerInstance)
             {
                 this.OuterInstance = outerInstance;
             }
@@ -44,13 +44,13 @@ namespace ActionsContentViewExample.ActionFragment
             }
         }
 
-        private class WebChromeClientAnonymousInnerClassHelper : WebChromeClient
+        private class MyWebChromeClient : WebChromeClient
         {
             private readonly WebViewFragment OuterInstance;
 
             private ProgressBar ViewContentProgress;
 
-            public WebChromeClientAnonymousInnerClassHelper(WebViewFragment outerInstance, ProgressBar viewContentProgress)
+            public MyWebChromeClient(WebViewFragment outerInstance, ProgressBar viewContentProgress)
             {
                 this.OuterInstance = outerInstance;
                 this.ViewContentProgress = viewContentProgress;
@@ -90,7 +90,7 @@ namespace ActionsContentViewExample.ActionFragment
             }
         }
 
-        public virtual string Url
+        public string Url
         {
             set
             {
@@ -105,7 +105,7 @@ namespace ActionsContentViewExample.ActionFragment
             }
         }
 
-        public virtual void Reload()
+        public void Reload()
         {
             if (TextUtils.IsEmpty(Url_Renamed))
             {
@@ -115,7 +115,7 @@ namespace ActionsContentViewExample.ActionFragment
             ViewContentWebView.LoadUrl(Url_Renamed);
         }
 
-        public virtual bool OnBackPressed()
+        public bool OnBackPressed()
         {
             if (ViewContentWebView.CanGoBack())
             {

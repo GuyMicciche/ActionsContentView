@@ -19,6 +19,7 @@ namespace ActionsContentViewExample
 
         private const string SCHEME = "settings";
         private const string AUTHORITY = "effects";
+
         public static Uri URI = new Uri.Builder().Scheme(SCHEME).Authority(AUTHORITY).Build();
 
         private EffectsAdapter MAdapter;
@@ -65,7 +66,7 @@ namespace ActionsContentViewExample
             title.Text = titleText.ToUpper();
 
             ActionsContentView viewActionsContentView = FindViewById<ActionsContentView>(Resource.Id.actionsContentView);
-            viewActionsContentView.OnActionsContentListener = new OnActionsContentListenerAnonymousInnerClassHelper(this);
+            viewActionsContentView.OnActionsContentListener = new ActionsContentListener(this);
 
             TextView name = FindViewById<TextView>(Resource.Id.effect_name);
             name.Text = MAdapter.GetEffectTitle(position);
@@ -88,14 +89,14 @@ namespace ActionsContentViewExample
 
             ViewList = FindViewById<ListView>(Resource.Id.actions);
             ViewList.Adapter = MAdapter;
-            ViewList.OnItemClickListener = new OnItemClickListenerAnonymousInnerClassHelper(this, position);
+            ViewList.OnItemClickListener = new ListViewItemClickListener(this, position);
         }
 
-        private class OnActionsContentListenerAnonymousInnerClassHelper : Java.Lang.Object, ActionsContentView.IOnActionsContentListener
+        private class ActionsContentListener : Java.Lang.Object, ActionsContentView.IOnActionsContentListener
         {
             private EffectsExampleActivity OuterInstance;
 
-            public OnActionsContentListenerAnonymousInnerClassHelper(EffectsExampleActivity outerInstance)
+            public ActionsContentListener(EffectsExampleActivity outerInstance)
             {
                 this.OuterInstance = outerInstance;
             }
@@ -106,13 +107,13 @@ namespace ActionsContentViewExample
             }
         }
 
-        private class OnItemClickListenerAnonymousInnerClassHelper : Java.Lang.Object, AdapterView.IOnItemClickListener
+        private class ListViewItemClickListener : Java.Lang.Object, AdapterView.IOnItemClickListener
         {
             private EffectsExampleActivity OuterInstance;
 
             private int Position;
 
-            public OnItemClickListenerAnonymousInnerClassHelper(EffectsExampleActivity outerInstance, int position)
+            public ListViewItemClickListener(EffectsExampleActivity outerInstance, int position)
             {
                 this.OuterInstance = outerInstance;
                 this.Position = position;

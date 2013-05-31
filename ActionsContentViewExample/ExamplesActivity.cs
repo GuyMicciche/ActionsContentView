@@ -42,13 +42,13 @@ namespace ActionsContentViewExample
             ListView viewActionsList = FindViewById<ListView>(Resource.Id.actions);
             ActionsAdapter actionsAdapter = new ActionsAdapter(this);
             viewActionsList.Adapter = actionsAdapter;
-            viewActionsList.OnItemClickListener = new OnItemClickListenerAnonymousInnerClassHelper(this, actionsAdapter);
+            viewActionsList.OnItemClickListener = new ActionsItemClickListener(this, actionsAdapter);
 
             ImageButton mainButton = FindViewById<ImageButton>(Resource.Id.mainButton);
-            mainButton.Click += mainButton_Click;
+            mainButton.Click += OnActionsButtonClick;
 
             Button sourceCodeButton = FindViewById<Button>(Resource.Id.sourceCodeButton);
-            sourceCodeButton.Click += sourceCodeButton_Click;
+            sourceCodeButton.Click += OnSourceCodeClick;
 
             if (savedInstanceState != null)
             {
@@ -59,7 +59,7 @@ namespace ActionsContentViewExample
             UpdateContent(CurrentUri);
         }
 
-        void mainButton_Click(object sender, System.EventArgs e)
+        public void OnActionsButtonClick(object sender, System.EventArgs e)
         {
             if (viewActionsContentView.IsActionsShown)
             {
@@ -71,40 +71,12 @@ namespace ActionsContentViewExample
             }
         }
 
-        void sourceCodeButton_Click(object sender, System.EventArgs e)
+        public void OnSourceCodeClick(object sender, System.EventArgs e)
         {
             Intent i = new Intent(Intent.ActionView);
             i.SetData(Uri.Parse(GetString(Resource.String.sources_link)));
 
             StartActivity(i);
-        }
-
-        private class OnItemClickListenerAnonymousInnerClassHelper : Java.Lang.Object, AdapterView.IOnItemClickListener
-        {
-            private ExamplesActivity OuterInstance;
-
-            private ActionsAdapter ActionsAdapter;
-
-            public OnItemClickListenerAnonymousInnerClassHelper(ExamplesActivity outerInstance, ActionsAdapter actionsAdapter)
-            {
-                this.OuterInstance = outerInstance;
-                this.ActionsAdapter = actionsAdapter;
-            }
-
-            public void OnItemClick(AdapterView adapter, View v, int position, long flags)
-            {
-                Uri uri = (Uri)ActionsAdapter.GetItem(position);
-
-                if (EffectsExampleActivity.URI.Equals(uri))
-                {
-                    OuterInstance.StartActivity(new Intent(OuterInstance.BaseContext, typeof(EffectsExampleActivity)));
-
-                    return;
-                }
-
-                OuterInstance.UpdateContent(uri);
-                OuterInstance.viewActionsContentView.ShowContent();
-            }
         }
 
         public override void OnBackPressed()
@@ -122,31 +94,11 @@ namespace ActionsContentViewExample
             base.OnBackPressed();
         }
 
-        public void OnActionsButtonClick(View view)
-        {
-            if (viewActionsContentView.IsActionsShown)
-            {
-                viewActionsContentView.ShowContent();
-            }
-            else
-            {
-                viewActionsContentView.ShowActions();
-            }
-        }
-
         protected override void OnSaveInstanceState(Bundle outState)
         {
             base.OnSaveInstanceState(outState);
             outState.PutString(STATE_URI, CurrentUri.ToString());
             outState.PutString(STATE_FRAGMENT_TAG, CurrentContentFragmentTag);
-        }
-
-        public void OnSourceCodeClick(View view)
-        {
-            Intent i = new Intent(Intent.ActionView);
-            i.SetData(Uri.Parse(GetString(Resource.String.sources_link)));
-
-            StartActivity(i);
         }
 
         public void UpdateContent(Uri uri)
@@ -229,6 +181,33 @@ namespace ActionsContentViewExample
 
             CurrentUri = uri;
             CurrentContentFragmentTag = tag;
+        }
+
+        private class ActionsItemClickListener : Java.Lang.Object, AdapterView.IOnItemClickListener
+        {
+            private ExamplesActivity OuterInstance;
+            private ActionsAdapter ActionsAdapter;
+
+            public ActionsItemClickListener(ExamplesActivity outerInstance, ActionsAdapter actionsAdapter)
+            {
+                this.OuterInstance = outerInstance;
+                this.ActionsAdapter = actionsAdapter;
+            }
+
+            public void OnItemClick(AdapterView adapter, View v, int position, long flags)
+            {
+                Uri uri = (Uri)ActionsAdapter.GetItem(position);
+
+                if (EffectsExampleActivity.URI.Equals(uri))
+                {
+                    OuterInstance.StartActivity(new Intent(OuterInstance.BaseContext, typeof(EffectsExampleActivity)));
+
+                    return;
+                }
+
+                OuterInstance.UpdateContent(uri);
+                OuterInstance.viewActionsContentView.ShowContent();
+            }
         }
 
         private class SettingsChangedListener : SandboxFragment.OnSettingsChangedListener

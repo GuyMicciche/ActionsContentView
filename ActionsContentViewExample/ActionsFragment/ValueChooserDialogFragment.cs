@@ -48,18 +48,18 @@ namespace ActionsContentViewExample.ActionFragment
             int itemsArrayId = Arguments.GetInt(ARG_ITEMS_ARRAY);
             string[] items = Resources.GetStringArray(itemsArrayId);
 
-            AlertDialog.Builder builder = (new AlertDialog.Builder(Activity)).SetTitle(titleId).SetItems(items, new OnClickListenerAnonymousInnerClassHelper(this, id));
+            AlertDialog.Builder builder = (new AlertDialog.Builder(Activity)).SetTitle(titleId).SetItems(items, new DialogItemOnClickListener(this, id));
 
             return builder.Create();
         }
 
-        private class OnClickListenerAnonymousInnerClassHelper : Java.Lang.Object, IDialogInterfaceOnClickListener
+        private class DialogItemOnClickListener : Java.Lang.Object, IDialogInterfaceOnClickListener
         {
             private readonly ValueChooserDialogFragment OuterInstance;
 
             private int Id;
 
-            public OnClickListenerAnonymousInnerClassHelper(ValueChooserDialogFragment outerInstance, int id)
+            public DialogItemOnClickListener(ValueChooserDialogFragment outerInstance, int id)
             {
                 this.OuterInstance = outerInstance;
                 this.Id = id;
